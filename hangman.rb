@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'yaml'
 FILE_NAME = './google-10000-english-no-swears.txt'
 # Hangman base class
 class Hangman
@@ -27,6 +28,8 @@ class Hangman
   def user_guess
     puts 'Please input your guess (or type save to save the game)'
     letter_guessed = gets.chomp.downcase
+    return save_game if letter_guessed == 'save'
+
     @letters_guessed[char_to_array_index(letter_guessed)] = true
     @mistakes_made += 1 unless @answer_word.split('').include?(letter_guessed)
   end
@@ -61,6 +64,35 @@ class Hangman
       puts 'Congratulations! You win'
     end
   end
+
+  def save_game
+    index = 0
+    filename = "saved_game#{index}.yml"
+    index += 1 while File.exist?("./saved_games/#{filename}.yml")
+    file = File.open("./saved_games/#{filename}", 'w')
+    file.puts YAML.dump({
+                          answer_word: @answer_word,
+                          letters_guessed: @letters_guessed,
+                          mistakes_made: @mistakes_made
+                        })
+    file.close
+    puts "Saved as game number #{index}"
+  end
+
+  def load_game
+    puts 'Please enter save game number'
+    index = gets.chomp
+    until File.exist?("./saved_games/saved_game#{index}.yml")
+      puts "File doesn't exist. Please re-enter the saved game number"
+      index = gets.chomp
+    end
+    file = File.open("./saved_games/saved_game#{index}.yml", 'r')
+    data = file.read
+    data = YAML.load data
+    @answer_word = data[:answer_word]
+    @letters_guessed = data[:letters_guessed]
+    @mistakes_made = data[:mistakes_made]
+  end
 end
 
 def new_random_word
@@ -80,7 +112,12 @@ end
 
 def play_game
   game = Hangman.new
-  game.new_game
+  puts 'Do you wish to load a saved game (y/n)?'
+  if gets.chomp.downcase == 'y'
+    game.load_game
+  else
+    game.new_game
+  end
   until game.finished?
     game.user_guess
     game.print_board
