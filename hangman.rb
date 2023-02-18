@@ -28,7 +28,7 @@ class Hangman
     puts 'Please input your guess (or type save to save the game)'
     letter_guessed = gets.chomp.downcase
     @letters_guessed[char_to_array_index(letter_guessed)] = true
-    @mistakes_made += 1 if @answer_word.split('').include?(letter_guessed)
+    @mistakes_made += 1 unless @answer_word.split('').include?(letter_guessed)
   end
 
   def print_board
@@ -39,6 +39,8 @@ class Hangman
         print '_'
       end
     end
+    print "\n"
+    puts "Mistakes remaining #{MAX_MISTAKES - @mistakes_made}"
   end
 end
 
