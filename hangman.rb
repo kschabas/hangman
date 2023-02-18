@@ -67,9 +67,8 @@ class Hangman
 
   def save_game
     index = 0
-    filename = "saved_game#{index}.yml"
-    index += 1 while File.exist?("./saved_games/#{filename}.yml")
-    file = File.open("./saved_games/#{filename}", 'w')
+    index += 1 while File.exist?("./saved_games/saved_game#{index}.yml")
+    file = File.open("./saved_games/saved_game#{index}.yml", 'w')
     file.puts YAML.dump({
                           answer_word: @answer_word,
                           letters_guessed: @letters_guessed,
@@ -92,6 +91,7 @@ class Hangman
     @answer_word = data[:answer_word]
     @letters_guessed = data[:letters_guessed]
     @mistakes_made = data[:mistakes_made]
+    print_board
   end
 end
 
