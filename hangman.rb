@@ -19,8 +19,9 @@ end
 
 def new_random_word
   word_list = File.readlines(FILE_NAME)
-  random_number = rand(1..word_list.length - 1) until word_list[random_number].length.between(5, 12)
-  word_list[random_number]
+  random_number = rand(1..word_list.length - 1)
+  random_number = rand(1..word_list.length - 1) until word_list[random_number].chomp.length.between?(5, 12)
+  word_list[random_number].chomp
 end
 
 def play_game
@@ -32,3 +33,5 @@ def play_game
   end
   game.print_end_message
 end
+
+play_game
