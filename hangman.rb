@@ -15,6 +15,14 @@ class Hangman
     @mistakes_made = 0
     @letters_guessed.each_index { |index| @letters_guessed[index] = false }
   end
+
+  def finished?
+    return true if @mistakes_made == MAX_MISTAKES
+
+    return false if @answer_word.split('').any? { |letter| @letters_guessed[letter.ord - 'a'.ord] == false }
+
+    true
+  end
 end
 
 def new_random_word
