@@ -23,6 +23,12 @@ class Hangman
 
     true
   end
+
+  def user_guess
+    puts 'Please input your guess (or type save to save the game)'
+    letter_guessed = gets.chomp.downcase
+    @letters_guessed[letter_guessed.ord - 'a'.ord] = true
+  end
 end
 
 def new_random_word
@@ -37,6 +43,7 @@ def play_game
   game.new_game
   until game.finished?
     game.user_guess
+    game.check_for_mistake
     game.print_board
   end
   game.print_end_message
