@@ -40,7 +40,26 @@ class Hangman
       end
     end
     print "\n"
-    puts "Mistakes remaining #{MAX_MISTAKES - @mistakes_made}"
+    print_incorrect_letters
+    puts "Mistakes remaining #{MAX_MISTAKES - @mistakes_made}\n\n"
+  end
+
+  def print_incorrect_letters
+    print 'Incorrect Letters Guessed: '
+    @letters_guessed.each_with_index do |bool, letter|
+      if bool && @answer_word.split('').include?(array_index_to_char(letter)) == false
+        print "#{array_index_to_char(letter)} "
+      end
+    end
+    print "\n"
+  end
+
+  def print_end_message
+    if @mistakes_made == MAX_MISTAKES
+      puts "You lose! The word was #{@answer_word}. Better luck next time"
+    else
+      puts 'Congratulations! You win'
+    end
   end
 end
 
@@ -53,6 +72,10 @@ end
 
 def char_to_array_index(char)
   char.ord - 'a'.ord
+end
+
+def array_index_to_char(index)
+  (index + 'a'.ord).chr
 end
 
 def play_game
